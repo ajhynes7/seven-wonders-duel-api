@@ -18,3 +18,21 @@ def test_game(session: Session, client: TestClient, date: str):
     assert response.json() == [
         {"id": 1, "date": date},
     ]
+
+
+def test_multiple_games(session: Session, client: TestClient):
+
+    dates = ["2022-01-01", "2022-01-02", "2022-01-03"]
+
+    for date in dates:
+        game = Game(date=date)
+        session.add(game)
+
+    response = client.get("/games")
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {"id": 1, "date": dates[0]},
+        {"id": 2, "date": dates[1]},
+        {"id": 3, "date": dates[2]},
+    ]
