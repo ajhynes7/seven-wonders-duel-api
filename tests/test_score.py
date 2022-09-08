@@ -65,7 +65,7 @@ def test_get_score_of_game(session: Session, client: TestClient):
     for score in scores:
         session.add(score)
 
-    response = client.get("/scores", params={"gameId": 1})
+    response = client.get("/scores", params={"game_id": 1})
 
     assert response.status_code == 200
     assert response.json() == [

@@ -34,12 +34,20 @@ def get_games(session: Session = Depends(get_session)):
 
 
 @app.get("/scores")
-def get_scores(gameId: int | None = None, session: Session = Depends(get_session)):
+def get_scores(
+    game_id: int | None = None,
+    session: Session = Depends(get_session),
+):
 
     statement = select(Score)
 
-    if gameId:
-        statement = statement.where(Score.game_id == gameId)
+    if game_id:
+        statement = statement.where(Score.game_id == game_id)
+
+    scores = session.exec(statement).all()
+
+    return scores
+
 
     scores = session.exec(statement).all()
 
