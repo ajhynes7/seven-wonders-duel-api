@@ -49,6 +49,30 @@ def get_scores(
     return scores
 
 
+@app.get("/scores/total")
+def get_total_scores(
+    game_id: int | None = None,
+    session: Session = Depends(get_session),
+):
+
+    statement = select(
+        Score.game_id,
+        Score.player_id,
+        (
+            Score.civilian
+            + Score.science
+            + Score.commerce
+            + Score.guilds
+            + Score.wonders
+            + Score.tokens
+            + Score.coins
+            + Score.military
+        ).label("total"),
+    )
+
+    if game_id:
+        statement = statement.where(Score.game_id == game_id)
+
     scores = session.exec(statement).all()
 
     return scores

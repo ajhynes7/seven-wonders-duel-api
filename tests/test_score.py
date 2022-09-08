@@ -96,3 +96,69 @@ def test_get_score_of_game(session: Session, client: TestClient):
             "military": 1,
         },
     ]
+
+
+def test_total_scores(session: Session, client: TestClient):
+
+    scores = [
+        Score(
+            game_id=game_id,
+            player_id=player_id,
+            civilian=1,
+            science=1,
+            commerce=1,
+            guilds=1,
+            wonders=1,
+            tokens=1,
+            coins=1,
+            military=1,
+        )
+        for game_id in range(1, 4)
+        for player_id in range(1, 3)
+    ]
+
+    for score in scores:
+        session.add(score)
+
+    response = client.get("/scores/total")
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {"game_id": 1, "player_id": 1, "total": 8},
+        {"game_id": 1, "player_id": 2, "total": 8},
+        {"game_id": 2, "player_id": 1, "total": 8},
+        {"game_id": 2, "player_id": 2, "total": 8},
+        {"game_id": 3, "player_id": 1, "total": 8},
+        {"game_id": 3, "player_id": 2, "total": 8},
+    ]
+
+
+def test_total_scores_of_game(session: Session, client: TestClient):
+
+    scores = [
+        Score(
+            game_id=game_id,
+            player_id=player_id,
+            civilian=1,
+            science=1,
+            commerce=1,
+            guilds=1,
+            wonders=1,
+            tokens=1,
+            coins=1,
+            military=1,
+        )
+        for game_id in range(1, 4)
+        for player_id in range(1, 3)
+    ]
+
+    for score in scores:
+        session.add(score)
+
+    response = client.get("/scores/total", params={"game_id": 1})
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {"game_id": 1, "player_id": 1, "total": 8},
+        {"game_id": 1, "player_id": 2, "total": 8},
+    ]
