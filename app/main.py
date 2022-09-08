@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException
 from sqlmodel import Session, create_engine, select
 
 from app.models.game import Game
@@ -82,7 +82,12 @@ def get_total_scores(
 def add_score(score: Score, session: Session = Depends(get_session)):
 
     session.add(score)
-    session.commit()
+
+    try:
+        session.commit()
+    except Exception:
+        raise HTTPException(status_code=403)
+
     session.refresh(score)
 
     return score

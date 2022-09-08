@@ -1,14 +1,19 @@
+import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
+from app.models.game import Game
+from app.models.player import Player
 from app.models.score import Score
 
 
-def test_score(session: Session, client: TestClient):
+def test_score(
+    session: Session, client: TestClient, games: list[Game], players: list[Player]
+):
 
     score = Score(
-        game_id=1,
-        player_id=1,
+        game_id=games[0].id,
+        player_id=players[0].id,
         civilian=1,
         science=1,
         commerce=1,
@@ -18,7 +23,9 @@ def test_score(session: Session, client: TestClient):
         coins=1,
         military=1,
     )
+
     session.add(score)
+    session.commit()
 
     response = client.get("/scores")
 
@@ -40,27 +47,8 @@ def test_score(session: Session, client: TestClient):
     ]
 
 
-def test_get_score_of_game(session: Session, client: TestClient):
-
-    scores = [
-        Score(
-            game_id=game_id,
-            player_id=player_id,
-            civilian=1,
-            science=1,
-            commerce=1,
-            guilds=1,
-            wonders=1,
-            tokens=1,
-            coins=1,
-            military=1,
-        )
-        for game_id in range(1, 4)
-        for player_id in range(1, 3)
-    ]
-
-    for score in scores:
-        session.add(score)
+@pytest.mark.usefixtures("scores")
+def test_get_score_of_game(client: TestClient):
 
     response = client.get("/scores", params={"game_id": 1})
 
@@ -95,27 +83,8 @@ def test_get_score_of_game(session: Session, client: TestClient):
     ]
 
 
-def test_total_scores(session: Session, client: TestClient):
-
-    scores = [
-        Score(
-            game_id=game_id,
-            player_id=player_id,
-            civilian=1,
-            science=1,
-            commerce=1,
-            guilds=1,
-            wonders=1,
-            tokens=1,
-            coins=1,
-            military=1,
-        )
-        for game_id in range(1, 4)
-        for player_id in range(1, 3)
-    ]
-
-    for score in scores:
-        session.add(score)
+@pytest.mark.usefixtures("scores")
+def test_total_scores(client: TestClient):
 
     response = client.get("/scores/total")
 
@@ -130,27 +99,8 @@ def test_total_scores(session: Session, client: TestClient):
     ]
 
 
-def test_total_scores_of_game(session: Session, client: TestClient):
-
-    scores = [
-        Score(
-            game_id=game_id,
-            player_id=player_id,
-            civilian=1,
-            science=1,
-            commerce=1,
-            guilds=1,
-            wonders=1,
-            tokens=1,
-            coins=1,
-            military=1,
-        )
-        for game_id in range(1, 4)
-        for player_id in range(1, 3)
-    ]
-
-    for score in scores:
-        session.add(score)
+@pytest.mark.usefixtures("scores")
+def test_total_scores_of_game(client: TestClient):
 
     response = client.get("/scores/total", params={"game_id": 1})
 
