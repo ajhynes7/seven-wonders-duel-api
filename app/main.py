@@ -76,3 +76,13 @@ def get_total_scores(
     scores = session.exec(statement).all()
 
     return scores
+
+
+@app.post("/scores", status_code=201)
+def add_score(score: Score, session: Session = Depends(get_session)):
+
+    session.add(score)
+    session.commit()
+    session.refresh(score)
+
+    return score

@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel
 
 
 class Score(SQLModel, table=True):
-    id: int = Field(primary_key=True)
+    id: int = Field(primary_key=True, default=None)
 
     game_id: int
     player_id: int
