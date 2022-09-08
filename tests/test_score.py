@@ -1,9 +1,6 @@
-import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from app.models.game import Game
-from app.models.player import Player
 from app.models.score import Score
 
 
