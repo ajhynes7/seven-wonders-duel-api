@@ -3,6 +3,7 @@ from sqlmodel import Session, create_engine, select
 
 from app.models.game import Game
 from app.models.player import Player
+from app.models.score import Score
 
 app = FastAPI()
 engine = create_engine("postgresql://localhost:5432/seven_wonders_duel")
@@ -30,3 +31,12 @@ def get_games(session: Session = Depends(get_session)):
     games = session.exec(statement).all()
 
     return games
+
+
+@app.get("/scores")
+def get_scores(session: Session = Depends(get_session)):
+
+    statement = select(Score)
+    scores = session.exec(statement).all()
+
+    return scores
