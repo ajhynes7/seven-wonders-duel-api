@@ -3,7 +3,8 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
-from app.main import app, get_session
+from app.api.util import get_session
+from app.main import app
 from app.models.game import Game
 from app.models.player import Player
 from app.models.score import Score

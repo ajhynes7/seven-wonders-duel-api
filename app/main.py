@@ -1,93 +1,9 @@
-from fastapi import Depends, FastAPI, HTTPException
-from sqlmodel import Session, create_engine, select
+from fastapi import FastAPI
 
-from app.models.game import Game
-from app.models.player import Player
-from app.models.score import Score
+from app.api import add_score, get_games, get_players, get_scores
 
 app = FastAPI()
-engine = create_engine("postgresql://localhost:5432/seven_wonders_duel")
 
 
-def get_session():
-
-    with Session(engine) as session:
-        yield session
-
-
-@app.get("/players")
-def get_players(session: Session = Depends(get_session)):
-
-    statement = select(Player)
-    players = session.exec(statement).all()
-
-    return players
-
-
-@app.get("/games")
-def get_games(session: Session = Depends(get_session)):
-
-    statement = select(Game)
-    games = session.exec(statement).all()
-
-    return games
-
-
-@app.get("/scores")
-def get_scores(
-    game_id: int | None = None,
-    session: Session = Depends(get_session),
-):
-
-    statement = select(Score)
-
-    if game_id:
-        statement = statement.where(Score.game_id == game_id)
-
-    scores = session.exec(statement).all()
-
-    return scores
-
-
-@app.get("/scores/total")
-def get_total_scores(
-    game_id: int | None = None,
-    session: Session = Depends(get_session),
-):
-
-    statement = select(
-        Score.game_id,
-        Score.player_id,
-        (
-            Score.civilian
-            + Score.science
-            + Score.commerce
-            + Score.guilds
-            + Score.wonders
-            + Score.tokens
-            + Score.coins
-            + Score.military
-        ).label("total"),
-    )
-
-    if game_id:
-        statement = statement.where(Score.game_id == game_id)
-
-    scores = session.exec(statement).all()
-
-    return scores
-
-
-@app.post("/scores", status_code=201)
-def add_score(score: Score, session: Session = Depends(get_session)):
-
-    session.add(score)
-
-    try:
-        session.commit()
-    except Exception:
-        raise HTTPException(status_code=403)
-
-    session.refresh(score)
-
-    return score
+for module in [add_score, get_games, get_players, get_scores]:
+    app.include_router(module.router)
