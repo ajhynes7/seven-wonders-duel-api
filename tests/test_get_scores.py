@@ -32,9 +32,8 @@ def test_score(
     assert response.status_code == 200
     assert response.json() == [
         {
-            "id": 1,
-            "game_id": 1,
-            "player_id": 1,
+            "game_date": games[0].date,
+            "player_name": players[0].name,
             "civilian": 1,
             "science": 1,
             "commerce": 1,
@@ -48,16 +47,17 @@ def test_score(
 
 
 @pytest.mark.usefixtures("scores")
-def test_get_score_of_game(client: TestClient):
+def test_get_score_of_game(
+    client: TestClient, games: list[Game], players: list[Player]
+):
 
     response = client.get("/scores", params={"game_id": 1})
 
     assert response.status_code == 200
     assert response.json() == [
         {
-            "id": 1,
-            "game_id": 1,
-            "player_id": 1,
+            "game_date": games[0].date,
+            "player_name": players[0].name,
             "civilian": 1,
             "science": 1,
             "commerce": 1,
@@ -68,9 +68,8 @@ def test_get_score_of_game(client: TestClient):
             "military": 1,
         },
         {
-            "id": 2,
-            "game_id": 1,
-            "player_id": 2,
+            "game_date": games[0].date,
+            "player_name": players[1].name,
             "civilian": 1,
             "science": 1,
             "commerce": 1,
@@ -84,28 +83,30 @@ def test_get_score_of_game(client: TestClient):
 
 
 @pytest.mark.usefixtures("scores")
-def test_total_scores(client: TestClient):
+def test_total_scores(client: TestClient, games: list[Game], players: list[Player]):
 
     response = client.get("/scores/total")
 
     assert response.status_code == 200
     assert response.json() == [
-        {"game_id": 1, "player_id": 1, "total": 8},
-        {"game_id": 1, "player_id": 2, "total": 8},
-        {"game_id": 2, "player_id": 1, "total": 8},
-        {"game_id": 2, "player_id": 2, "total": 8},
-        {"game_id": 3, "player_id": 1, "total": 8},
-        {"game_id": 3, "player_id": 2, "total": 8},
+        {"game_date": games[0].date, "player_name": players[0].name, "total": 8},
+        {"game_date": games[0].date, "player_name": players[1].name, "total": 8},
+        {"game_date": games[1].date, "player_name": players[0].name, "total": 8},
+        {"game_date": games[1].date, "player_name": players[1].name, "total": 8},
+        {"game_date": games[2].date, "player_name": players[0].name, "total": 8},
+        {"game_date": games[2].date, "player_name": players[1].name, "total": 8},
     ]
 
 
 @pytest.mark.usefixtures("scores")
-def test_total_scores_of_game(client: TestClient):
+def test_total_scores_of_game(
+    client: TestClient, games: list[Game], players: list[Player]
+):
 
     response = client.get("/scores/total", params={"game_id": 1})
 
     assert response.status_code == 200
     assert response.json() == [
-        {"game_id": 1, "player_id": 1, "total": 8},
-        {"game_id": 1, "player_id": 2, "total": 8},
+        {"game_date": games[0].date, "player_name": players[0].name, "total": 8},
+        {"game_date": games[0].date, "player_name": players[1].name, "total": 8},
     ]
