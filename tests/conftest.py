@@ -1,7 +1,7 @@
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
 from sqlmodel import Session, SQLModel, create_engine
-from sqlmodel.pool import StaticPool
 
 from app.api.util import get_session
 from app.main import app
@@ -14,15 +14,14 @@ from app.models.score import Score
 def session():
 
     engine = create_engine(
-        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+        "postgresql://localhost:5432/seven_wonders_duel_test",
     )
     SQLModel.metadata.create_all(engine)
 
     with Session(engine) as session:
-        # Enable foreign key constraints in the SQLite test database.
-        session.execute("pragma foreign_keys=on")
-
         yield session
+
+    SQLModel.metadata.drop_all(engine)
 
 
 @pytest.fixture()
@@ -63,22 +62,13 @@ def players(session: Session) -> list[Player]:
 @pytest.fixture()
 def scores(session: Session, games: list[Game], players: list[Player]) -> list[Score]:
 
-    scores = [
-        Score(
-            game_id=game.id,
-            player_id=player.id,
-            civilian=1,
-            science=1,
-            commerce=1,
-            guilds=1,
-            wonders=1,
-            tokens=1,
-            coins=1,
-            military=1,
-        )
-        for game in games
-        for player in players
-    ]
+    df_scores = pd.read_csv("tests/data/scores.csv")
+
+    scores = []
+
+    for _, row in df_scores.iterrows():
+        score = Score(**row)
+        scores.append(score)
 
     session.add_all(scores)
     session.commit()
