@@ -13,6 +13,7 @@ router = APIRouter()
 
 @router.get("/wins")
 def get_wins(
+    game_id: int | None = None,
     session: Session = Depends(get_session),
 ):
 
@@ -42,6 +43,9 @@ def get_wins(
         .join(Player, total_score_cte.c.player_id == Player.id)
         .order_by(Game.id, total_score_cte.c.total.desc())
     )
+
+    if game_id:
+        statement = statement.where(Game.id == game_id)
 
     statement.compile(dialect=postgresql.dialect())
 
