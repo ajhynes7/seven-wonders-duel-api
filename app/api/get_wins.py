@@ -5,6 +5,7 @@ from sqlmodel import Session, select
 
 from app.api.util import get_session
 from app.models.game import Game
+from app.models.military_supremacy import MilitarySupremacy
 from app.models.player import Player
 from app.models.score import Score
 
@@ -48,6 +49,26 @@ def get_wins(
         statement = statement.where(Game.id == game_id)
 
     statement.compile(dialect=postgresql.dialect())
+
+    winners = session.exec(statement).all()
+
+    return winners
+
+
+@router.get("/wins/military")
+def get_military_wins(
+    session: Session = Depends(get_session),
+):
+
+    statement = (
+        select(
+            MilitarySupremacy.game_id,
+            Game.date.label("game_date"),
+            Player.name.label("winner"),
+        )
+        .join(Game, MilitarySupremacy.game_id == Game.id)
+        .join(Player, MilitarySupremacy.player_id == Player.id)
+    )
 
     winners = session.exec(statement).all()
 
