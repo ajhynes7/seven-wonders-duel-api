@@ -8,6 +8,7 @@ from app.api import (
     get_players,
     get_scores,
     get_wins,
+    military_supremacy,
 )
 
 app = FastAPI()
@@ -21,5 +22,6 @@ for module in [
     get_players,
     get_scores,
     get_wins,
+    military_supremacy,
 ]:
     app.include_router(module.router)
