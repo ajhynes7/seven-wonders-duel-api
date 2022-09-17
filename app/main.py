@@ -1,27 +1,15 @@
 from fastapi import FastAPI
 
-from app.api import (
-    add_game,
-    add_military_win,
-    add_score,
-    get_games,
-    get_players,
-    get_scores,
-    get_wins,
-    military_supremacy,
-)
+from app.api import games, military_supremacies, players, scores, wins
 
 app = FastAPI()
 
 
 for module in [
-    add_game,
-    add_military_win,
-    add_score,
-    get_games,
-    get_players,
-    get_scores,
-    get_wins,
-    military_supremacy,
+    games,
+    military_supremacies,
+    players,
+    scores,
+    wins,
 ]:
     app.include_router(module.router)

@@ -1,5 +1,5 @@
-from fastapi import Depends
-from fastapi.routing import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.exceptions import HTTPException
 from sqlmodel import Session, select
 
 from app.api.util import get_session
@@ -72,3 +72,18 @@ def get_total_scores(
     scores = session.exec(statement).all()
 
     return scores
+
+
+@router.post("/scores", status_code=201)
+def add_score(score: Score, session: Session = Depends(get_session)):
+
+    session.add(score)
+
+    try:
+        session.commit()
+    except Exception:
+        raise HTTPException(status_code=403)
+
+    session.refresh(score)
+
+    return score
