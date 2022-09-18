@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi.routing import APIRouter
 from sqlalchemy.dialects import postgresql
-from sqlalchemy.sql.functions import coalesce
+from sqlalchemy.sql.functions import coalesce, count
 from sqlmodel import Session, select
 
 from app.api.util import get_session
@@ -14,11 +14,7 @@ from app.models.score import Score
 router = APIRouter()
 
 
-@router.get("/wins")
-def get_wins(
-    game_id: int | None = None,
-    session: Session = Depends(get_session),
-):
+def get_game_winners_cte():
 
     total_scores = select(
         Score.game_id,
@@ -41,7 +37,7 @@ def get_wins(
         .order_by(total_scores.c.game_id, total_scores.c.total.desc())
     ).cte()
 
-    game_winners = (
+    return (
         select(
             Game.id.label("game_id"),
             coalesce(
@@ -57,6 +53,15 @@ def get_wins(
         .order_by(Game.id)
     ).cte()
 
+
+@router.get("/wins")
+def get_wins(
+    game_id: int | None = None,
+    session: Session = Depends(get_session),
+):
+
+    game_winners = get_game_winners_cte()
+
     statement = (
         select(
             game_winners.c.game_id,
@@ -70,6 +75,25 @@ def get_wins(
 
     if game_id:
         statement = statement.where(Game.id == game_id)
+
+    statement.compile(dialect=postgresql.dialect())
+
+    return session.exec(statement).all()
+
+
+@router.get("/wins/total")
+def get_total_wins(
+    session: Session = Depends(get_session),
+):
+
+    game_winners = get_game_winners_cte()
+
+    statement = (
+        select(Player.name.label("player_name"), count().label("total_wins"))
+        .join(game_winners, Player.id == game_winners.c.player_id)
+        .group_by(Player.id)
+        .order_by(Player.id)
+    )
 
     statement.compile(dialect=postgresql.dialect())
 

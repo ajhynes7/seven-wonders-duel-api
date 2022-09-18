@@ -64,5 +64,22 @@ def test_get_wins_of_game(client: TestClient, games: list[Game], players: list[P
     assert response.status_code == 200
 
     assert response.json() == [
-        {"game_id": games[0].id, "game_date": games[0].date, "winner": players[1].name}
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "winner": players[1].name,
+        }
+    ]
+
+
+@pytest.mark.usefixtures("scores", "games")
+def test_get_total_wins(client: TestClient, players: list[Player]):
+
+    response = client.get("/wins/total")
+
+    assert response.status_code == 200
+
+    assert response.json() == [
+        {"player_name": players[0].name, "total_wins": 2},
+        {"player_name": players[1].name, "total_wins": 1},
     ]
