@@ -57,7 +57,7 @@ def test_get_wins_with_supremacies(
 
 
 @pytest.mark.usefixtures("scores")
-def test_get_wins_of_game(client: TestClient, games: list[Game], players: list[Player]):
+def test_get_win_of_game(client: TestClient, games: list[Game], players: list[Player]):
 
     response = client.get("/wins", params={"game_id": 1})
 
