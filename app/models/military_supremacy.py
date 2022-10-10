@@ -7,5 +7,5 @@ class MilitarySupremacy(SQLModel, table=True):
 
     id: int = Field(primary_key=True, default=None)
 
-    game_id: int
-    player_id: int
+    game_id: int = Field(foreign_key="game.id")
+    player_id: int = Field(foreign_key="player.id")

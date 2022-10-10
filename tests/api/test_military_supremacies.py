@@ -45,3 +45,25 @@ def test_add_military_supremacy(
 
     assert military_supremacy.game_id == games[0].id
     assert military_supremacy.player_id == players[0].id
+
+
+def test_add_military_supremacy_with_invalid_game(
+    client: TestClient, players: list[Player]
+):
+    response = client.post(
+        "/military-supremacies",
+        json={"game_id": 1, "player_id": players[0].id},
+    )
+
+    assert response.status_code == 403
+
+
+def test_add_military_supremacy_with_invalid_player(
+    client: TestClient, games: list[Game]
+):
+    response = client.post(
+        "/military-supremacies",
+        json={"game_id": games[0].id, "player_id": 1},
+    )
+
+    assert response.status_code == 403

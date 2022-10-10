@@ -1,4 +1,5 @@
 from fastapi import Depends
+from fastapi.exceptions import HTTPException
 from fastapi.routing import APIRouter
 from sqlmodel import Session, select
 
@@ -34,9 +35,13 @@ def get_scientific_supremacies(
 def add_scientific_win(
     scientific_supremacy: ScientificSupremacy, session: Session = Depends(get_session)
 ):
-
     session.add(scientific_supremacy)
-    session.commit()
+
+    try:
+        session.commit()
+    except Exception:
+        raise HTTPException(status_code=403)
+
     session.refresh(scientific_supremacy)
 
     return scientific_supremacy

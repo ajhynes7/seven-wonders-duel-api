@@ -1,4 +1,5 @@
 from fastapi import Depends
+from fastapi.exceptions import HTTPException
 from fastapi.routing import APIRouter
 from sqlmodel import Session, select
 
@@ -36,7 +37,12 @@ def add_military_win(
 ):
 
     session.add(military_supremacy)
-    session.commit()
+
+    try:
+        session.commit()
+    except Exception:
+        raise HTTPException(status_code=403)
+
     session.refresh(military_supremacy)
 
     return military_supremacy
