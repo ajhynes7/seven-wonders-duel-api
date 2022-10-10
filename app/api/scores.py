@@ -32,6 +32,7 @@ def get_scores(
         )
         .join(Game, Score.game_id == Game.id)
         .join(Player, Score.player_id == Player.id)
+        .order_by(Game.id, Player.id)
     )
 
     if game_id:

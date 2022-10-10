@@ -48,6 +48,91 @@ def test_get_score(
     ]
 
 
+def test_get_scores_ordered_by_game_id_and_player_id(
+    session: Session, client: TestClient, players: list[Player]
+):
+    game_date = "2022-10-09"
+
+    for game_id in [2, 1]:
+        game = Game(id=game_id, date=game_date)
+
+        for player_index in [1, 0]:
+            score = Score(
+                game_id=game_id,
+                player_id=players[player_index].id,
+                civilian=1,
+                science=1,
+                commerce=1,
+                guilds=1,
+                wonders=1,
+                tokens=1,
+                coins=1,
+                military=1,
+            )
+
+            session.add_all([game, score])
+
+    session.commit()
+
+    response = client.get("/scores")
+
+    assert response.status_code == 200
+    assert response.json() == [
+        {
+            "game_id": 1,
+            "game_date": game_date,
+            "player_name": players[0].name,
+            "civilian": 1,
+            "science": 1,
+            "commerce": 1,
+            "guilds": 1,
+            "wonders": 1,
+            "tokens": 1,
+            "coins": 1,
+            "military": 1,
+        },
+        {
+            "game_id": 1,
+            "game_date": game_date,
+            "player_name": players[1].name,
+            "civilian": 1,
+            "science": 1,
+            "commerce": 1,
+            "guilds": 1,
+            "wonders": 1,
+            "tokens": 1,
+            "coins": 1,
+            "military": 1,
+        },
+        {
+            "game_id": 2,
+            "game_date": game_date,
+            "player_name": players[0].name,
+            "civilian": 1,
+            "science": 1,
+            "commerce": 1,
+            "guilds": 1,
+            "wonders": 1,
+            "tokens": 1,
+            "coins": 1,
+            "military": 1,
+        },
+        {
+            "game_id": 2,
+            "game_date": game_date,
+            "player_name": players[1].name,
+            "civilian": 1,
+            "science": 1,
+            "commerce": 1,
+            "guilds": 1,
+            "wonders": 1,
+            "tokens": 1,
+            "coins": 1,
+            "military": 1,
+        },
+    ]
+
+
 @pytest.mark.usefixtures("scores")
 def test_get_score_of_game(
     client: TestClient, games: list[Game], players: list[Player]
