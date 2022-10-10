@@ -3,9 +3,8 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.models.game import Game
-from app.models.military_supremacy import MilitarySupremacy
 from app.models.player import Player
-from app.models.scientific_supremacy import ScientificSupremacy
+from app.models.supremacy import Supremacy
 
 
 @pytest.mark.usefixtures("scores")
@@ -35,9 +34,11 @@ def test_get_wins_with_supremacies(
 
     session.commit()
 
-    military_supremacy = MilitarySupremacy(game_id=games[3].id, player_id=players[0].id)
-    scientific_supremacy = ScientificSupremacy(
-        game_id=games[4].id, player_id=players[1].id
+    military_supremacy = Supremacy(
+        game_id=games[3].id, player_id=players[0].id, type="military"
+    )
+    scientific_supremacy = Supremacy(
+        game_id=games[4].id, player_id=players[1].id, type="scientific"
     )
 
     session.add_all([military_supremacy, scientific_supremacy])

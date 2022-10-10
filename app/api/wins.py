@@ -6,10 +6,9 @@ from sqlmodel import Session, select
 
 from app.api.util import get_session
 from app.models.game import Game
-from app.models.military_supremacy import MilitarySupremacy
 from app.models.player import Player
-from app.models.scientific_supremacy import ScientificSupremacy
 from app.models.score import Score
+from app.models.supremacy import Supremacy
 
 router = APIRouter()
 
@@ -42,14 +41,12 @@ def get_game_winners_cte():
             Game.id.label("game_id"),
             coalesce(
                 score_winners.c.player_id,
-                MilitarySupremacy.player_id,
-                ScientificSupremacy.player_id,
+                Supremacy.player_id,
             ).label("player_id"),
         )
         .distinct(Game.id)
         .outerjoin(score_winners, Game.id == score_winners.c.game_id)
-        .outerjoin(MilitarySupremacy, Game.id == MilitarySupremacy.game_id)
-        .outerjoin(ScientificSupremacy, Game.id == ScientificSupremacy.game_id)
+        .outerjoin(Supremacy, Game.id == Supremacy.game_id)
         .order_by(Game.id)
     ).cte()
 
