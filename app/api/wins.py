@@ -63,7 +63,7 @@ def get_wins(
         select(
             game_winners.c.game_id,
             Game.date.label("game_date"),
-            Player.name.label("winner"),
+            Player.name.label("player_name"),
         )
         .join(Player, game_winners.c.player_id == Player.id)
         .join(Game, game_winners.c.game_id == Game.id)

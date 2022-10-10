@@ -30,7 +30,7 @@ def test_get_supremacy(
         {
             "game_id": games[0].id,
             "game_date": games[0].date,
-            "winner": players[0].name,
+            "player_name": players[0].name,
             "type": supremacy_type,
         },
     ]

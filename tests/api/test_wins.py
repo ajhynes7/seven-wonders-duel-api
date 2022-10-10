@@ -15,9 +15,21 @@ def test_get_wins(client: TestClient, games: list[Game], players: list[Player]):
     assert response.status_code == 200
 
     assert response.json() == [
-        {"game_id": games[0].id, "game_date": games[0].date, "winner": players[1].name},
-        {"game_id": games[1].id, "game_date": games[1].date, "winner": players[0].name},
-        {"game_id": games[2].id, "game_date": games[2].date, "winner": players[0].name},
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[1].name,
+        },
+        {
+            "game_id": games[1].id,
+            "game_date": games[1].date,
+            "player_name": players[0].name,
+        },
+        {
+            "game_id": games[2].id,
+            "game_date": games[2].date,
+            "player_name": players[0].name,
+        },
     ]
 
 
@@ -49,11 +61,31 @@ def test_get_wins_with_supremacies(
     assert response.status_code == 200
 
     assert response.json() == [
-        {"game_id": games[0].id, "game_date": games[0].date, "winner": players[1].name},
-        {"game_id": games[1].id, "game_date": games[1].date, "winner": players[0].name},
-        {"game_id": games[2].id, "game_date": games[2].date, "winner": players[0].name},
-        {"game_id": games[3].id, "game_date": games[3].date, "winner": players[0].name},
-        {"game_id": games[4].id, "game_date": games[4].date, "winner": players[1].name},
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[1].name,
+        },
+        {
+            "game_id": games[1].id,
+            "game_date": games[1].date,
+            "player_name": players[0].name,
+        },
+        {
+            "game_id": games[2].id,
+            "game_date": games[2].date,
+            "player_name": players[0].name,
+        },
+        {
+            "game_id": games[3].id,
+            "game_date": games[3].date,
+            "player_name": players[0].name,
+        },
+        {
+            "game_id": games[4].id,
+            "game_date": games[4].date,
+            "player_name": players[1].name,
+        },
     ]
 
 
@@ -68,7 +100,7 @@ def test_get_win_of_game(client: TestClient, games: list[Game], players: list[Pl
         {
             "game_id": games[0].id,
             "game_date": games[0].date,
-            "winner": players[1].name,
+            "player_name": players[1].name,
         }
     ]
 

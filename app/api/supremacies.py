@@ -19,8 +19,8 @@ def get_supremacies(
         select(
             Supremacy.game_id,
             Game.date.label("game_date"),
+            Player.name.label("player_name"),
             Supremacy.type,
-            Player.name.label("winner"),
         )
         .join(Game, Supremacy.game_id == Game.id)
         .join(Player, Supremacy.player_id == Player.id)
