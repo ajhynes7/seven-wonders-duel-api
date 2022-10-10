@@ -90,3 +90,30 @@ def test_add_supremacy_with_invalid_player(
     )
 
     assert response.status_code == 403
+
+
+@pytest.mark.parametrize("supremacy_type", ["military", "scientific"])
+def test_add_supremacy_with_duplicate_game(
+    client: TestClient, games: list[Game], players: list[Player], supremacy_type: str
+):
+    response = client.post(
+        "/supremacies",
+        json={
+            "game_id": games[0].id,
+            "player_id": players[0].id,
+            "type": supremacy_type,
+        },
+    )
+
+    assert response.status_code == 201
+
+    response = client.post(
+        "/supremacies",
+        json={
+            "game_id": games[0].id,
+            "player_id": players[0].id,
+            "type": supremacy_type,
+        },
+    )
+
+    assert response.status_code == 403
