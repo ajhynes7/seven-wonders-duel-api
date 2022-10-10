@@ -24,6 +24,7 @@ def get_supremacies(
         )
         .join(Game, Supremacy.game_id == Game.id)
         .join(Player, Supremacy.player_id == Player.id)
+        .order_by(Game.id)
     )
 
     winners = session.exec(statement).all()

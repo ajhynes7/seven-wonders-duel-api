@@ -36,6 +36,58 @@ def test_get_supremacy(
     ]
 
 
+def test_get_supremacies_ordered_by_game_id(
+    session: Session, client: TestClient, players: list[Player]
+):
+    game_date = "2022-10-09"
+
+    for game_id, player_index, supremacy_type in zip(
+        [3, 2, 1, 4], [0, 0, 1, 0], ["military", "military", "scientific", "scientific"]
+    ):
+        game = Game(id=game_id, date=game_date)
+
+        supremacy = Supremacy(
+            game_id=game.id,
+            player_id=players[player_index].id,
+            type=supremacy_type,
+        )
+
+        session.add_all([game, supremacy])
+
+    session.commit()
+
+    response = client.get("/supremacies")
+
+    assert response.status_code == 200
+
+    assert response.json() == [
+        {
+            "game_id": 1,
+            "game_date": game_date,
+            "player_name": players[1].name,
+            "type": "scientific",
+        },
+        {
+            "game_id": 2,
+            "game_date": game_date,
+            "player_name": players[0].name,
+            "type": "military",
+        },
+        {
+            "game_id": 3,
+            "game_date": game_date,
+            "player_name": players[0].name,
+            "type": "military",
+        },
+        {
+            "game_id": 4,
+            "game_date": game_date,
+            "player_name": players[0].name,
+            "type": "scientific",
+        },
+    ]
+
+
 @pytest.mark.usefixtures("scores")
 @pytest.mark.parametrize("supremacy_type", ["military", "scientific"])
 def test_add_supremacy(
