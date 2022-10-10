@@ -73,14 +73,32 @@ def test_get_win_of_game(client: TestClient, games: list[Game], players: list[Pl
     ]
 
 
-@pytest.mark.usefixtures("scores", "games")
-def test_get_total_wins(client: TestClient, players: list[Player]):
+@pytest.mark.usefixtures("scores")
+def test_get_total_wins(
+    session: Session, client: TestClient, games: list[Game], players: list[Player]
+):
+
+    for date in ["2022-09-17", "2022-09-18"]:
+        game = Game(date=date)
+        games.append(game)
+
+        session.add(game)
+
+    session.commit()
+
+    military_supremacy = Supremacy(
+        game_id=games[3].id, player_id=players[0].id, type="military"
+    )
+    scientific_supremacy = Supremacy(
+        game_id=games[4].id, player_id=players[1].id, type="scientific"
+    )
+
+    session.add_all([military_supremacy, scientific_supremacy])
 
     response = client.get("/wins/total")
 
     assert response.status_code == 200
-
     assert response.json() == [
-        {"player_name": players[0].name, "total_wins": 2},
-        {"player_name": players[1].name, "total_wins": 1},
+        {"player_name": players[0].name, "total_wins": 3},
+        {"player_name": players[1].name, "total_wins": 2},
     ]
