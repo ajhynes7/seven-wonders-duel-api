@@ -40,7 +40,7 @@ def client(session: Session):
 @pytest.fixture()
 def games(session: Session) -> list[Game]:
 
-    games = [Game(date=date) for date in ["2022-09-01", "2022-01-02", "2022-09-03"]]
+    games = [Game(date=date) for date in ["2022-09-01", "2022-09-02", "2022-09-03"]]
 
     session.add_all(games)
     session.commit()
