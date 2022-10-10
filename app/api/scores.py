@@ -18,6 +18,7 @@ def get_scores(
 
     statement = (
         select(
+            Game.id.label("game_id"),
             Game.date.label("game_date"),
             Player.name.label("player_name"),
             Score.civilian,
@@ -49,6 +50,7 @@ def get_total_scores(
 
     statement = (
         select(
+            Game.id.label("game_id"),
             Game.date.label("game_date"),
             Player.name.label("player_name"),
             (

@@ -33,6 +33,7 @@ def test_get_score(
     assert response.status_code == 200
     assert response.json() == [
         {
+            "game_id": games[0].id,
             "game_date": games[0].date,
             "player_name": players[0].name,
             "civilian": 1,
@@ -57,6 +58,7 @@ def test_get_score_of_game(
     assert response.status_code == 200
     assert response.json() == [
         {
+            "game_id": games[0].id,
             "game_date": games[0].date,
             "player_name": players[0].name,
             "civilian": 28,
@@ -69,6 +71,7 @@ def test_get_score_of_game(
             "military": 2,
         },
         {
+            "game_id": games[0].id,
             "game_date": games[0].date,
             "player_name": players[1].name,
             "civilian": 16,
@@ -90,12 +93,42 @@ def test_get_total_scores(client: TestClient, games: list[Game], players: list[P
 
     assert response.status_code == 200
     assert response.json() == [
-        {"game_date": games[0].date, "player_name": players[0].name, "total": 58},
-        {"game_date": games[0].date, "player_name": players[1].name, "total": 59},
-        {"game_date": games[1].date, "player_name": players[0].name, "total": 64},
-        {"game_date": games[1].date, "player_name": players[1].name, "total": 49},
-        {"game_date": games[2].date, "player_name": players[0].name, "total": 59},
-        {"game_date": games[2].date, "player_name": players[1].name, "total": 55},
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[0].name,
+            "total": 58,
+        },
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[1].name,
+            "total": 59,
+        },
+        {
+            "game_id": games[1].id,
+            "game_date": games[1].date,
+            "player_name": players[0].name,
+            "total": 64,
+        },
+        {
+            "game_id": games[1].id,
+            "game_date": games[1].date,
+            "player_name": players[1].name,
+            "total": 49,
+        },
+        {
+            "game_id": games[2].id,
+            "game_date": games[2].date,
+            "player_name": players[0].name,
+            "total": 59,
+        },
+        {
+            "game_id": games[2].id,
+            "game_date": games[2].date,
+            "player_name": players[1].name,
+            "total": 55,
+        },
     ]
 
 
@@ -108,8 +141,18 @@ def test_get_total_scores_of_game(
 
     assert response.status_code == 200
     assert response.json() == [
-        {"game_date": games[0].date, "player_name": players[0].name, "total": 58},
-        {"game_date": games[0].date, "player_name": players[1].name, "total": 59},
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[0].name,
+            "total": 58,
+        },
+        {
+            "game_id": games[0].id,
+            "game_date": games[0].date,
+            "player_name": players[1].name,
+            "total": 59,
+        },
     ]
 
 
