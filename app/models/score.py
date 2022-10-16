@@ -2,10 +2,9 @@ from sqlmodel import Field, SQLModel
 
 
 class Score(SQLModel, table=True):
-    id: int = Field(primary_key=True, default=None)
 
-    game_id: int = Field(foreign_key="game.id")
-    player_id: int = Field(foreign_key="player.id")
+    game_id: int = Field(foreign_key="game.id", primary_key=True)
+    player_id: int = Field(foreign_key="player.id", primary_key=True)
 
     civilian: int
     science: int
