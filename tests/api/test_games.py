@@ -47,3 +47,19 @@ def test_add_game(session: Session, client: TestClient, date: str):
 
     statement = select(Game).where(Game.id == 1)
     assert session.exec(statement).one()
+
+
+@pytest.mark.parametrize("date", ["abc", "123", "2022", "2022-09", "2022-09-015"])
+def test_add_invalid_game(session: Session, client: TestClient, date: str):
+
+    response = client.post("/games", json={"date": date})
+
+    assert response.status_code == 422
+
+    response_json = response.json()
+    assert (
+        response_json["detail"][0]["msg"] == "The date must have the format YYYY-MM-DD."
+    )
+
+    statement = select(Game)
+    assert not session.exec(statement).all()
