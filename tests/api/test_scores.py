@@ -245,30 +245,27 @@ def test_add_score(
     session: Session, client: TestClient, games: list[Game], players: list[Player]
 ):
 
-    response = client.post(
-        "/scores",
-        json={
-            "game_id": games[0].id,
-            "player_id": players[0].id,
-            "civilian": 1,
-            "science": 1,
-            "commerce": 1,
-            "guilds": 1,
-            "wonders": 1,
-            "tokens": 1,
-            "coins": 1,
-            "military": 1,
-        },
-    )
+    post_json = {
+        "game_id": games[0].id,
+        "player_id": players[0].id,
+        "civilian": 1,
+        "science": 1,
+        "commerce": 1,
+        "guilds": 1,
+        "wonders": 1,
+        "tokens": 1,
+        "coins": 1,
+        "military": 1,
+    }
+
+    response = client.post("/scores", json=post_json)
 
     assert response.status_code == 201
 
     response_json = response.json()
+    assert response_json == post_json
 
-    score_id = response_json["id"]
-    assert score_id == 1
-
-    statement = select(Score).where(Score.id == score_id)
+    statement = select(Score).where(Game.id == games[0].id, Player.id == players[0].id)
     assert session.exec(statement).one()
 
 
