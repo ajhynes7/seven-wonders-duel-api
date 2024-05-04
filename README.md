@@ -6,12 +6,15 @@ An API for keeping track of scores in Seven Wonders Duel, using FastAPI and Post
 
 - Create a PostgreSQL database called `seven_wonders_duel`.
 - Install Python >= 3.10.
-- Install Poetry, a package manager for Python.
+- Install `uv`, a package installer for Python.
 
-- From the root of this repository, install the Python dependencies with Poetry.
+- From the root of this repository, install the Python dependencies with `uv`.
+
 
 ```sh
-$ poetry install --no-root
+$ uv venv
+$ source .venv/bin/activate
+$ uv pip install -r requirements.txt
 ```
 
 - Run the FastAPI server.
