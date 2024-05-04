@@ -10,7 +10,6 @@ class Game(SQLModel, table=True):
 
     @validator("date")
     def date_must_have_specific_format(cls, input: str) -> str:
-
         pattern = r"\d{4}-\d{2}-\d{2}"
         match = re.fullmatch(pattern, input)
 

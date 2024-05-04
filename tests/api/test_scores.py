@@ -11,7 +11,6 @@ from app.models.score import Score
 def test_get_score(
     session: Session, client: TestClient, games: list[Game], players: list[Player]
 ):
-
     score = Score(
         game_id=games[0].id,
         player_id=players[0].id,
@@ -137,7 +136,6 @@ def test_get_scores_ordered_by_game_id_and_player_id(
 def test_get_score_of_game(
     client: TestClient, games: list[Game], players: list[Player]
 ):
-
     response = client.get("/scores", params={"game_id": 1})
 
     assert response.status_code == 200
@@ -173,7 +171,6 @@ def test_get_score_of_game(
 
 @pytest.mark.usefixtures("scores")
 def test_get_total_scores(client: TestClient, games: list[Game], players: list[Player]):
-
     response = client.get("/scores/total")
 
     assert response.status_code == 200
@@ -221,7 +218,6 @@ def test_get_total_scores(client: TestClient, games: list[Game], players: list[P
 def test_get_total_scores_of_game(
     client: TestClient, games: list[Game], players: list[Player]
 ):
-
     response = client.get("/scores/total", params={"game_id": 1})
 
     assert response.status_code == 200
@@ -244,7 +240,6 @@ def test_get_total_scores_of_game(
 def test_add_score(
     session: Session, client: TestClient, games: list[Game], players: list[Player]
 ):
-
     post_json = {
         "game_id": games[0].id,
         "player_id": players[0].id,
@@ -270,7 +265,6 @@ def test_add_score(
 
 
 def test_add_score_with_invalid_game(client: TestClient, players: list[Player]):
-
     response = client.post(
         "/scores",
         json={
@@ -291,7 +285,6 @@ def test_add_score_with_invalid_game(client: TestClient, players: list[Player]):
 
 
 def test_add_score_with_invalid_player(client: TestClient, games: list[Game]):
-
     response = client.post(
         "/scores",
         json={

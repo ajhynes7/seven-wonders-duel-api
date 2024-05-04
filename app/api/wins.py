@@ -14,7 +14,6 @@ router = APIRouter()
 
 
 def get_game_winners_cte():
-
     total_scores = select(
         Score.game_id,
         Score.player_id,
@@ -56,7 +55,6 @@ def get_wins(
     game_id: int | None = None,
     session: Session = Depends(get_session),
 ):
-
     game_winners = get_game_winners_cte()
 
     statement = (
@@ -82,7 +80,6 @@ def get_wins(
 def get_total_wins(
     session: Session = Depends(get_session),
 ):
-
     game_winners = get_game_winners_cte()
 
     statement = (

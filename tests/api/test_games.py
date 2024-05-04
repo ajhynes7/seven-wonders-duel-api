@@ -7,7 +7,6 @@ from app.models.game import Game
 
 @pytest.mark.parametrize("date", ["2022-09-01", "2022-09-02"])
 def test_get_game(session: Session, client: TestClient, date: str):
-
     game = Game(date=date)
     session.add(game)
 
@@ -20,7 +19,6 @@ def test_get_game(session: Session, client: TestClient, date: str):
 
 
 def test_get_games(session: Session, client: TestClient):
-
     dates = ["2022-01-01", "2022-01-02", "2022-01-03"]
 
     for date in dates:
@@ -39,7 +37,6 @@ def test_get_games(session: Session, client: TestClient):
 
 @pytest.mark.parametrize("date", ["2022-09-01", "2022-09-02", "2022-09-03"])
 def test_add_game(session: Session, client: TestClient, date: str):
-
     response = client.post("/games", json={"date": date})
 
     assert response.status_code == 201
@@ -51,7 +48,6 @@ def test_add_game(session: Session, client: TestClient, date: str):
 
 @pytest.mark.parametrize("date", ["abc", "123", "2022", "2022-09", "2022-09-015"])
 def test_add_invalid_game(session: Session, client: TestClient, date: str):
-
     response = client.post("/games", json={"date": date})
 
     assert response.status_code == 422

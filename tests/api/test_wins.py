@@ -9,7 +9,6 @@ from app.models.supremacy import Supremacy
 
 @pytest.mark.usefixtures("scores")
 def test_get_wins(client: TestClient, games: list[Game], players: list[Player]):
-
     response = client.get("/wins")
 
     assert response.status_code == 200
@@ -37,7 +36,6 @@ def test_get_wins(client: TestClient, games: list[Game], players: list[Player]):
 def test_get_wins_with_supremacies(
     session: Session, client: TestClient, games: list[Game], players: list[Player]
 ):
-
     for date in ["2022-09-17", "2022-09-18"]:
         game = Game(date=date)
         games.append(game)
@@ -91,7 +89,6 @@ def test_get_wins_with_supremacies(
 
 @pytest.mark.usefixtures("scores")
 def test_get_win_of_game(client: TestClient, games: list[Game], players: list[Player]):
-
     response = client.get("/wins", params={"game_id": 1})
 
     assert response.status_code == 200
@@ -109,7 +106,6 @@ def test_get_win_of_game(client: TestClient, games: list[Game], players: list[Pl
 def test_get_total_wins(
     session: Session, client: TestClient, games: list[Game], players: list[Player]
 ):
-
     for date in ["2022-09-17", "2022-09-18"]:
         game = Game(date=date)
         games.append(game)

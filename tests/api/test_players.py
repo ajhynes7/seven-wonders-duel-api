@@ -7,7 +7,6 @@ from app.models.player import Player
 
 @pytest.mark.parametrize("name", ["Andrew", "Alice"])
 def test_get_player(session: Session, client: TestClient, name: str):
-
     player = Player(name=name)
     session.add(player)
 
@@ -20,7 +19,6 @@ def test_get_player(session: Session, client: TestClient, name: str):
 
 
 def test_get_players(session: Session, client: TestClient):
-
     names = ["Andrew", "Alice"]
 
     for name in names:

@@ -8,22 +8,16 @@ repos:
       - id: trailing-whitespace
   - repo: local
     hooks:
-      - id: isort
-        name: isort
+      - id: ruff_check
+        name: ruff check
         language: system
-        entry: isort
+        entry: ruff check
+        args: [--fix, --exit-non-zero-on-fix]
         types: [python]
   - repo: local
     hooks:
-      - id: black
-        name: black
+      - id: ruff_format
+        name: ruff format
         language: system
-        entry: black
-        types: [python]
-  - repo: local
-    hooks:
-      - id: flake8
-        name: flake8
-        language: system
-        entry: flake8
+        entry: ruff format
         types: [python]

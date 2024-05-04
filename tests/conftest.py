@@ -12,7 +12,6 @@ from app.models.score import Score
 
 @pytest.fixture()
 def session():
-
     engine = create_engine(
         "postgresql://localhost:5432/seven_wonders_duel_test",
     )
@@ -39,7 +38,6 @@ def client(session: Session):
 
 @pytest.fixture()
 def games(session: Session) -> list[Game]:
-
     games = [Game(date=date) for date in ["2022-09-01", "2022-09-02", "2022-09-03"]]
 
     session.add_all(games)
@@ -50,7 +48,6 @@ def games(session: Session) -> list[Game]:
 
 @pytest.fixture()
 def players(session: Session) -> list[Player]:
-
     players = [Player(name=name) for name in ["Andrew", "Alice"]]
 
     session.add_all(players)
@@ -61,7 +58,6 @@ def players(session: Session) -> list[Player]:
 
 @pytest.fixture()
 def scores(session: Session, games: list[Game], players: list[Player]) -> list[Score]:
-
     df_scores = pd.read_csv("tests/data/scores.csv")
 
     scores = []

@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.get("/players")
 def get_players(session: Session = Depends(get_session)):
-
     statement = select(Player)
     players = session.exec(statement).all()
 

@@ -10,7 +10,6 @@ router = APIRouter()
 
 @router.get("/games")
 def get_games(session: Session = Depends(get_session)):
-
     statement = select(Game)
     games = session.exec(statement).all()
 
@@ -19,7 +18,6 @@ def get_games(session: Session = Depends(get_session)):
 
 @router.post("/games", status_code=201)
 def add_game(game: Game, session: Session = Depends(get_session)):
-
     session.add(game)
     session.commit()
     session.refresh(game)

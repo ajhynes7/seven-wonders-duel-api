@@ -15,7 +15,6 @@ def get_scores(
     game_id: int | None = None,
     session: Session = Depends(get_session),
 ):
-
     statement = (
         select(
             Game.id.label("game_id"),
@@ -48,7 +47,6 @@ def get_total_scores(
     game_id: int | None = None,
     session: Session = Depends(get_session),
 ):
-
     statement = (
         select(
             Game.id.label("game_id"),
@@ -79,7 +77,6 @@ def get_total_scores(
 
 @router.post("/scores", status_code=201)
 def add_score(score: Score, session: Session = Depends(get_session)):
-
     session.add(score)
 
     try:
