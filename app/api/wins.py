@@ -1,14 +1,11 @@
 from fastapi import Depends
 from fastapi.routing import APIRouter
 from sqlalchemy import case
-from sqlalchemy.dialects import postgresql
-from sqlalchemy.orm import aliased
 from sqlalchemy.sql.functions import coalesce, count
 from sqlmodel import Session, select
 
 from app.api.util import get_session
 from app.models.game import Game
-from app.models.player import Player
 from app.models.score import Score
 from app.models.supremacy import Supremacy
 
